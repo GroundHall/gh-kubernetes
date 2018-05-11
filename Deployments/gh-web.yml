@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-web-deployment
+  labels:
+    app: gh-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gh-web
+  template:
+    metadata:
+      labels:
+        app: gh-web
+    spec:
+      containers:
+      - name: gh-web
+        image: chrispcode/gh-web:v11  
+        env:
+        - name: graphqlURI
+          value: gh-port-graphql-svc
+        ports:
+        - containerPort: 80

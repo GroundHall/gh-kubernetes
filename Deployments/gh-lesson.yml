@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-lesson-deployment
+  labels:
+    app: gh-lesson
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gh-lesson
+  template:
+    metadata:
+      labels:
+        app: gh-lesson
+    spec:
+      containers:
+      - name: gh-lesson
+        image: chrispcode/gh-lesson:v5
+        env:
+        - name: SERVICE_PORT
+          value: "80"
+        - name: DB_HOST
+          value: rethinkdb-access-svc
+        - name: DB_NAME
+          value: GroundHall
+        - name: DB_TABLE_NAME
+          value: Lessons
+        - name: SECRET_TOKEN
+          valueFrom:
+              secretKeyRef:
+                name: inhouse
+                key: token
+        ports:
+        - containerPort: 80

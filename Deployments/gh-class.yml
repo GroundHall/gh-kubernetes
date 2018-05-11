@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-class-deployment
+  labels:
+    app: gh-class
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gh-class
+  template:
+    metadata:
+      labels:
+        app: gh-class
+    spec:
+      containers:
+      - name: gh-class
+        image: chrispcode/gh-class:v5
+        env:
+        - name: SERVICE_PORT
+          value: "80"
+        - name: DB_HOST
+          value: rethinkdb-access-svc
+        - name: DB_NAME
+          value: GroundHall
+        - name: DB_TABLE_NAME
+          value: Classes
+        - name: SECRET_TOKEN
+          valueFrom:
+              secretKeyRef:
+                name: inhouse
+                key: token
+        ports:
+        - containerPort: 80

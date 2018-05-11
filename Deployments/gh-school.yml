@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-school-deployment
+  labels:
+    app: gh-school
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gh-school
+  template:
+    metadata:
+      labels:
+        app: gh-school
+    spec:
+      containers:
+      - name: gh-school
+        image: chrispcode/gh-school:v5
+        env:
+        - name: SERVICE_PORT
+          value: "80"
+        - name: DB_HOST
+          value: rethinkdb-access-svc
+        - name: DB_NAME
+          value: GroundHall
+        - name: DB_TABLE_NAME
+          value: School
+        - name: SECRET_TOKEN
+          valueFrom:
+              secretKeyRef:
+                name: inhouse
+                key: token
+        ports:
+        - containerPort: 80

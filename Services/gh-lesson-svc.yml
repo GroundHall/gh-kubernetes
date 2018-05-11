@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "gh-lesson-svc"
+spec:
+  selector:
+    app: gh-lesson
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 80

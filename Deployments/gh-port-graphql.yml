@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-port-graphql-deployment
+  labels:
+    app: gh-port-graphql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gh-port-graphql
+  template:
+    metadata:
+      labels:
+        app: gh-port-graphql
+    spec:
+      containers:
+      - name: gh-port-graphql
+        image: chrispcode/gh-port-graphql:v5
+        env:
+        - name: SERVICE_PORT
+          value: "80"
+        - name: CLASS_API_HOST
+          value: "gh-class-svc"
+        - name: CLASS_API_PORT
+          value: "80"
+        - name: ROOM_API_HOST
+          value: "gh-room-svc"
+        - name: ROOM_API_PORT
+          value: "80"
+        - name: SUBJECT_API_HOST
+          value: "gh-subject-svc"
+        - name: SUBJECT_API_PORT
+          value: "80"
+        - name: LESSON_API_HOST
+          value: "gh-lesson-svc"
+        - name: LESSON_API_PORT
+          value: "80"
+        - name: USER_API_HOST
+          value: "gh-user-svc"
+        - name: USER_API_PORT
+          value: "80"
+        - name: POST_API_HOST
+          value: "gh-post-svc"
+        - name: POST_API_PORT
+          value: "80"
+        - name: HASHTAG_API_HOST
+          value: "gh-hashtag-svc"
+        - name: HASHTAG_API_PORT
+          value: "80"
+        - name: JWT_KEY
+          valueFrom:
+              secretKeyRef:
+                name: inhouse
+                key: token
+        ports:
+        - containerPort: 80

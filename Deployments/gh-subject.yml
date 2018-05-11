@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-subject-deployment
+  labels:
+    app: gh-subject
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gh-subject
+  template:
+    metadata:
+      labels:
+        app: gh-subject
+    spec:
+      containers:
+      - name: gh-subject
+        image: chrispcode/gh-subject:v5
+        env:
+        - name: SERVICE_PORT
+          value: "80"
+        - name: DB_HOST
+          value: rethinkdb-access-svc
+        - name: DB_NAME
+          value: GroundHall
+        - name: DB_TABLE_NAME
+          value: Subjects
+        - name: SECRET_TOKEN
+          valueFrom:
+              secretKeyRef:
+                name: inhouse
+                key: token
+        ports:
+        - containerPort: 80

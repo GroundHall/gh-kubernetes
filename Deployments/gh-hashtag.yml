@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gh-hashtag-deployment
+  labels:
+    app: gh-hashtag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gh-hashtag
+  template:
+    metadata:
+      labels:
+        app: gh-hashtag
+    spec:
+      containers:
+      - name: gh-hashtag
+        image: chrispcode/gh-hashtag:v5
+        env:
+        - name: SERVICE_PORT
+          value: "80"
+        - name: DB_HOST
+          value: rethinkdb-access-svc
+        - name: DB_NAME
+          value: GroundHall
+        - name: DB_TABLE_NAME
+          value: Hashtags
+        - name: SECRET_TOKEN
+          valueFrom:
+              secretKeyRef:
+                name: inhouse
+                key: token
+        ports:
+        - containerPort: 80
